@@ -1,6 +1,7 @@
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -21,33 +22,36 @@ public class CallBackTest {
         WebDriverManager.chromedriver().setup();
     }
 
-    @BeforeAll
-    static void setUp() {
+    @BeforeEach
+    void setUp() {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--no-sandbox");
-        options.addArguments("--headless");
+      //  options.addArguments("--headless");
         driver = new ChromeDriver(options);
-
+        driver.get("http://localhost:9999/");
     }
 
     @AfterEach
     public void tearDown() {
-        driver.quit();
+        if (driver != null) {
+            driver.quit();
+        }
         driver = null;
     }
 
     @Test
-    void shouldSubmitRequest() {
-        driver.get("http://localhost:9999/");
+    void shouldSubmitRequest1() {
         WebElement form = driver.findElement(By.cssSelector("form"));
         form.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Артем");
         form.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+79309554618");
         driver.findElement(By.cssSelector("[data-test-id='agreement']")).click();
         driver.findElement(By.cssSelector("[data-test-id='submit']")).click();
 
-        WebElement result = driver.findElement(By.cssSelector("[data-test-id='callback-success"));
+        WebElement result = driver.findElement(By.cssSelector("[data-test-id='callback-success']"));
         assertTrue(result.isDisplayed());
-        assertEquals("Ваша заявка успешно отправлена!",result.getText().trim());
+        assertEquals("Ваша заявка успешно отправлена!", result.getText().trim());
     }
+
+   
 }
