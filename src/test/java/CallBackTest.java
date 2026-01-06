@@ -28,7 +28,7 @@ public class CallBackTest {
         options.addArguments("--no-sandbox");
         options.addArguments("--headless");
         driver = new ChromeDriver(options);
-        driver.get("http://localhost:9999/");
+
     }
 
     @AfterEach
@@ -39,6 +39,7 @@ public class CallBackTest {
 
     @Test
     void shouldSubmitRequest() {
+        driver.get("http://localhost:9999/");
         WebElement form = driver.findElement(By.cssSelector("form"));
         form.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Артем");
         form.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+79309554618");
